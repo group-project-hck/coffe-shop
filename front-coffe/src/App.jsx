@@ -11,6 +11,7 @@ import MainLayout from "./components/mainLayout";
 import Product from "./views/product";
 import Form_Data from "./views/form_data";
 import Public from "./views/public";
+import Chat_Page from "./views/chat_page";
 
 const router = createBrowserRouter([
 	{
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
 			{
 				path: "/form/:id",
 				element: <Form_Data />,
+			},
+			{
+				path: "/chat",
+				element: <Chat_Page />,
 			},
 		],
 	},
