@@ -26,6 +26,7 @@ const io = new Server(httpServer, {
 let users = [];
 console.log(users);
 let messages = [];
+console.log(messages);
 
 io.on("connection", (socket) => {
 	console.log("A user connected", socket.id);
@@ -37,11 +38,13 @@ io.on("connection", (socket) => {
 
 	io.emit("users", users);
 
-	socket.emit("message:info", messages);
-
 	socket.on("message:new", (param) => {
 		messages.push(param);
-		io.emit("message:info", param);
+		if (param.target) {
+			socket.emit("message:info", messages);
+			io.to(param.target).emit("message:info", param);
+			io.to(param.id).emit("message:info", param);
+		}
 	});
 
 	socket.on("disconnect", () => {
@@ -52,6 +55,10 @@ io.on("connection", (socket) => {
 	});
 
 	// ----- ROOM JOIN -----
+	socket.on("join_room", (data) => {
+		socket.join(data);
+		console.log(`user with ID: ${socket.id} join room: ${data}`);
+	});
 });
 
 module.exports = httpServer;
