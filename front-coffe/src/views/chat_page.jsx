@@ -48,9 +48,7 @@ export default function Chat_Page() {
       console.log(error);
     }
   };
-
-  console.log(messages);
-  console.log(users, "<<<<<<<<<<<<<<<<<<<<<<<");
+  
   return (
     <>
       {/* component */}
