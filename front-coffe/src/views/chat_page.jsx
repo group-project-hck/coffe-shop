@@ -5,6 +5,22 @@ import { useEffect, useState } from "react";
 const socket = io(`${BASE_URL}`);
 
 export default function Chat_Page() {
+  const [emotes, setEmotes] = useState([
+    "😊",
+    "😂",
+    "😍",
+    "👍",
+    "😁",
+    "😅",
+    "😅",
+    "😅",
+  ]);
+  const [showEmoji, setShowEmoji] = useState(false);
+
+  const addEmoteToMessage = (emote) => {
+    setNewMessage((prevInput) => prevInput + emote);
+    setShowEmoji(false);
+  };
   const [users, setUsers] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -22,7 +38,6 @@ export default function Chat_Page() {
     socket.on("users", (param) => {
       setUsers(param);
     });
-
 
     socket.on("message:info", (param) => {
       setMessages(messages.concat(param));
@@ -43,7 +58,7 @@ export default function Chat_Page() {
         message: newMessage,
       });
 
-      setNewMessage("")
+      setNewMessage("");
     } catch (error) {
       console.log(error);
     }
@@ -118,7 +133,6 @@ export default function Chat_Page() {
                             </div>
                           </div>
                         </div>
-                        
                       ) : (
                         <div className="col-start-1 col-end-8 p-3 rounded-lg">
                           <div className="flex flex-row items-center">
@@ -126,7 +140,7 @@ export default function Chat_Page() {
                             <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
                               <div>{el.message}</div>
                             </div>
-                          </div> 
+                          </div>
                         </div>
                       );
                     })}
@@ -161,8 +175,40 @@ export default function Chat_Page() {
                         onChange={(e) => setNewMessage(e.target.value)}
                         value={newMessage}
                       />
+                      <button
+                        type="button"
+                        onClick={() => setShowEmoji((v) => !v)}
+                        className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600"
+                      >
+                        <svg
+                          className="w-6 h-6"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      </button>
                     </div>
                   </div>
+                  {showEmoji ? (
+                    <div className="emotes-container">
+                      {emotes.map((emote, index) => (
+                        <button
+                          key={index}
+                          onClick={() => addEmoteToMessage(emote)}
+                        >
+                          {emote}
+                        </button>
+                      ))}
+                    </div>
+                  ) : null}
                   <div className="ml-4">
                     <button
                       className="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1 flex-shrink-0"
