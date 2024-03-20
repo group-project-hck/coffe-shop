@@ -1,22 +1,4 @@
-import React, { useState } from "react";
 export default function Chat_Page() {
-  const [emotes, setEmotes] = useState([
-    "😊",
-    "😂",
-    "😍",
-    "👍",
-    "😁",
-    "😅",
-    "😅",
-    "😅",
-  ]);
-  const [input, setInput] = useState("");
-  const [showEmoji, setShowEmoji] = useState(false);
-
-  const addEmoteToMessage = (emote) => {
-    setInput((prevInput) => prevInput + emote);
-    setShowEmoji(false);
-  };
   return (
     <>
       {/* component */}
@@ -76,26 +58,21 @@ export default function Chat_Page() {
               <div className="flex flex-col h-full overflow-x-auto mb-4">
                 <div className="flex flex-col h-full">
                   <div className="grid grid-cols-12 gap-y-2">
-                    <div className="col-start-1 col-end-8 p-3 rounded-lg">
-                      <div className="flex flex-row items-center">
-                        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
-                          A
-                        </div>
-                        <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
-                          <div>Hey How are you today?</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-start-6 col-end-13 p-3 rounded-lg">
-                      <div className="flex items-center justify-start flex-row-reverse">
-                        <div className="flex items-center justify-center h-10 w-10 rounded-full bg-indigo-500 flex-shrink-0">
-                          A
+                    {messages.map((el) => {
+                      return el.from === localStorage.username ? (
+                        <div className="col-start-6 col-end-13 p-3 rounded-lg">
+                          <div className="flex items-center justify-start flex-row-reverse">
+                            <div className="flex items-center justify-center h-4 w-4 bg-yellow-600 rounded-full"></div>
+                            <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
+                              <div>{el.message}</div>
+                            </div>
+                          </div>
                         </div>
                         <div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
                           <div>I'm ok what about you?</div>
                         </div>
                       </div>
-                    </div>
+                    </div> 
                   </div>
                 </div>
               </div>
@@ -121,18 +98,10 @@ export default function Chat_Page() {
                 <div className="flex-grow ml-4">
                   <div className="relative w-full">
                     <input
-                      value={input} // nilai input utk text
                       type="text"
-                      onChange={(e) => setInput(e.target.value)} // Memperbarui input untuk teks
                       className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
                     />
-
-                    <button
-                      onClick={() => {
-                        setShowEmoji(!showEmoji);
-                      }}
-                      className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600"
-                    >
+                    <button className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600">
                       <svg
                         className="w-6 h-6"
                         fill="none"
@@ -149,18 +118,6 @@ export default function Chat_Page() {
                       </svg>
                     </button>
                   </div>
-                  {showEmoji ? (
-                    <div className="emotes-container">
-                      {emotes.map((emote, index) => (
-                        <button
-                          key={index}
-                          onClick={() => addEmoteToMessage(emote)}
-                        >
-                          {emote}
-                        </button>
-                      ))}
-                    </div>
-                  ) : null}
                 </div>
                 <div className="ml-4">
                   <button className="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1 flex-shrink-0">
