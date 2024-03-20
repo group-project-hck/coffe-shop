@@ -39,6 +39,7 @@ class User_Controller {
 				audience: process.env.CLIENT_ID,
 			});
 			const payload = ticket.getPayload();
+			console.log(payload);
 
 			const { email, name } = payload;
 			const [user, created] = await User.findOrCreate({

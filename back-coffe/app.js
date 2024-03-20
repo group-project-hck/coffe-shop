@@ -29,16 +29,13 @@ let messages = [];
 io.on("connection", (socket) => {
 	console.log("A user connected", socket.id);
 
-	// handshake
 	console.log(socket.handshake.auth);
 	if (socket.handshake.auth.username) {
-		users.push(socket.handshake.auth.username);
+		users.push({ username: socket.handshake.auth.username, id: socket.id });
 	}
 
-	// emit server to all client
 	socket.emit("message:info", messages);
 
-	// send users event to all client
 	io.emit("users", users);
 
 	socket.on("message:new", (param) => {
@@ -52,6 +49,9 @@ io.on("connection", (socket) => {
 		});
 		io.emit("users", users);
 	});
+
+	// ----- ROOM JOIN -----
+	socket.join("some room");
 });
 
 module.exports = httpServer;

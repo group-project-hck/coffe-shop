@@ -8,8 +8,8 @@
   },
   "test": {
     "username": "postgres",
-    "password": "090874",
-    "database": "database_coffe_test",
+    "password": "labola",
+    "database": "database_coffe_test ",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "logging": false
