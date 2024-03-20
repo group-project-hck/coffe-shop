@@ -64,8 +64,10 @@ export default function Chat_Page() {
 		}
 	};
 
-	console.log(messages);
-	console.log(users, "<<<<<<<<<<<<<<<<<<<<<<<");
+	console.log(users);
+
+	// --------- ROOM ---------
+
 	return (
 		<>
 			{/* component */}
@@ -89,12 +91,16 @@ export default function Chat_Page() {
 									/>
 								</svg>
 							</div>
-							<div className="ml-2 font-bold text-2xl">MeChat</div>
+							<div className="ml-2 font-bold text-2xl">MinChat</div>
 						</div>
 						<div className="flex flex-col items-center bg-indigo-100 border border-gray-200 mt-4 w-full py-6 px-4 rounded-lg">
 							<div className="h-20 w-20 rounded-full border overflow-hidden">
 								<img
-									src="https://avatars3.githubusercontent.com/u/2763884?s=128"
+									src={
+										localStorage.picture
+											? localStorage.picture
+											: "https://cdn.pixabay.com/photo/2013/07/12/14/36/man-148582_1280.png"
+									}
 									alt="Avatar"
 									className="h-full w-full"
 								/>
@@ -102,7 +108,7 @@ export default function Chat_Page() {
 							<div className="text-sm font-semibold mt-2">
 								{localStorage.username}
 							</div>
-							<div className="text-xs text-gray-500">Lead UI/UX Designer</div>
+							{/* <div className="text-xs text-gray-500">Lead UI/UX Designer</div> */}
 							<div className="flex flex-row items-center mt-3">
 								<div className="flex flex-col justify-center h-4 w-8 bg-indigo-500 rounded-full">
 									<div className="h-3 w-3 bg-white rounded-full self-end mr-1" />
@@ -114,13 +120,15 @@ export default function Chat_Page() {
 							<div className="flex flex-row items-center justify-between text-xs">
 								<span className="font-bold">Active Conversations</span>
 							</div>
-							<div className="flex flex-col space-y-1 mt-4 -mx-2 h-48 overflow-y-auto">
-								<button className="flex flex-row items-center hover:bg-gray-100 rounded-xl p-2">
-									<div className="flex items-center justify-center h-4 w-4 bg-green-600 rounded-full"></div>
-									<div className="ml-2 text-sm font-semibold">
-										{localStorage.username}
-									</div>
-								</button>
+							<div className="flex flex-col space-y-1 mt-4 -mx-2 h-72 overflow-y-auto">
+								{users.map((el) => (
+									<button className="flex flex-row items-center hover:bg-gray-100 rounded-xl p-2">
+										<div className="flex items-center justify-center h-4 w-4 bg-green-600 rounded-full"></div>
+										<div className="ml-2 text-sm font-semibold">
+											{el.username}
+										</div>
+									</button>
+								))}
 							</div>
 						</div>
 					</div>

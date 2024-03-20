@@ -76,9 +76,10 @@ export default function Form_Login() {
 				url: BASE_URL + "/google-login",
 				data: { google_token },
 			});
-			
+
 			localStorage.setItem("access_token", data.access_token);
 			localStorage.setItem("username", data.username);
+			localStorage.setItem("picture", data.picture);
 			const Toast = Swal.mixin({
 				toast: true,
 				position: "top-end",

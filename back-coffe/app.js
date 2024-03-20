@@ -24,6 +24,7 @@ const io = new Server(httpServer, {
 });
 
 let users = [];
+console.log(users);
 let messages = [];
 
 io.on("connection", (socket) => {
@@ -31,12 +32,12 @@ io.on("connection", (socket) => {
 
 	console.log(socket.handshake.auth);
 	if (socket.handshake.auth.username) {
-		users.push({ username: socket.handshake.auth.username, id: socket.id });
+		users.push({ id: socket.id, username: socket.handshake.auth.username });
 	}
 
-	socket.emit("message:info", messages);
-
 	io.emit("users", users);
+
+	socket.emit("message:info", messages);
 
 	socket.on("message:new", (param) => {
 		messages.push(param);
@@ -44,14 +45,13 @@ io.on("connection", (socket) => {
 	});
 
 	socket.on("disconnect", () => {
-		users = users.filter((user) => {
-			return user !== socket.handshake.auth.username;
+		users = users.filter(({ username }) => {
+			return username !== socket.handshake.auth.username;
 		});
 		io.emit("users", users);
 	});
 
 	// ----- ROOM JOIN -----
-	socket.join("some room");
 });
 
 module.exports = httpServer;
