@@ -112,18 +112,6 @@ export default function Chat_Page() {
                   <div className="grid grid-cols-12 gap-y-2">
                     {messages.map((el) => {
                       return el.from === localStorage.username ? (
-                        <div className="col-start-1 col-end-8 p-3 rounded-lg">
-                          <div className="flex flex-row items-center">
-                            <div className="flex items-center justify-center h-4 w-4 bg-blue-600 rounded-full"></div>
-                            <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
-                              <div>{el.message}</div>
-                            </div>
-                          </div>
-                          <div>
-                            {/* <span>{el.from}</span> */}
-                          </div>
-                        </div>
-                      ) : (
                         <div className="col-start-6 col-end-13 p-3 rounded-lg">
                           <div className="flex items-center justify-start flex-row-reverse">
                             <div className="flex items-center justify-center h-4 w-4 bg-yellow-600 rounded-full"></div>
@@ -131,9 +119,16 @@ export default function Chat_Page() {
                               <div>{el.message}</div>
                             </div>
                           </div>
-                          <div mr-10>
-                            {/* <span >{el.from}</span> */}
-                          </div>
+                        </div>
+                        
+                      ) : (
+                        <div className="col-start-1 col-end-8 p-3 rounded-lg">
+                          <div className="flex flex-row items-center">
+                            <div className="flex items-center justify-center h-4 w-4 bg-blue-600 rounded-full"></div>
+                            <div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
+                              <div>{el.message}</div>
+                            </div>
+                          </div> 
                         </div>
                       );
                     })}
