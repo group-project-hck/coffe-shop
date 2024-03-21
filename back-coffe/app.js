@@ -26,6 +26,7 @@ const io = new Server(httpServer, {
 let users = [];
 let messages = [];
 const rooms = ["room1", "room2", "room3"];
+let likes = {};
 
 io.on("connection", (socket) => {
 	console.log("A user connected", socket.id);
@@ -43,21 +44,20 @@ io.on("connection", (socket) => {
 		io.emit("users", users, rooms);
 	});
 
-   // ----- ROOM JOIN -----
-  socket.on("like:add", ({id}) => {
-    likes[id] = likes[id] ? likes[id]+1 : 1
-    io.emit("like:update:" + id, likes[id]); // Mengirim pembaruan jumlah like ke semua klien
-  });
+	// ----- ROOM JOIN -----
+	socket.on("like:add", ({ id }) => {
+		likes[id] = likes[id] ? likes[id] + 1 : 1;
+		io.emit("like:update:" + id, likes[id]); // Mengirim pembaruan jumlah like ke semua klien
+	});
 
-  // Tangani event saat client mengurangi like
-  socket.on("like:subtract", ({id}) => {
+	// Tangani event saat client mengurangi like
+	socket.on("like:subtract", ({ id }) => {
+		likes[id] = likes[id] ? likes[id] - 1 : 0;
+		io.emit("like:update:" + id, likes[id]);
+		// likes--; // Mengurangi jumlah like jika lebih dari 0
+		// io.emit("like:update", likes); // Mengirim pembaruan jumlah like ke semua klien
+	});
 
-    likes[id] = likes[id] ? likes[id]-1 : 0
-    io.emit("like:update:" + id, likes[id]); 
-      // likes--; // Mengurangi jumlah like jika lebih dari 0
-      // io.emit("like:update", likes); // Mengirim pembaruan jumlah like ke semua klien
-  });
-  
 	// ----- ROOM JOIN -----
 	socket.on("message:new", (param) => {
 		if (param.target) {
