@@ -18,6 +18,7 @@ export default function Home_Page() {
   const bgdetail = theme[currentTheme].bgdetail;
   const bgtext = theme[currentTheme].text;
 
+  // console.log(setCurrentTheme)
   useEffect(() => {
     dispatch(fetch_product(params));
   }, [params]);
@@ -87,32 +88,38 @@ export default function Home_Page() {
 
   return (
     <div className={`${bgColor}`}>
-      <div className={`flex flex-row form-control mt-20 mb-6 max-sm:mx-8 sm:mx-10 lg:mx-24 lg:fixed lg:mx-48 lg:mt-[-87px] z-10 ${bgColor} ${bgcomps} ${bgdetail} ${bgtext}`}>
-        <input
-          type="text"
-          placeholder="Search"
-          className="input input-bordered"
-          name="q"
-          onChange={GetParams}
-        />
-        <div className="mt-3 ">
-          <button
-            className={`mb-5 ml-11`}
-            onClick={() => {
-              setCurrentTheme(currentTheme === "dark" ? "light" : "dark");
-            }}
-          >
-            Toggle Theme: {currentTheme}
-          </button>
+      <div className="container flex flex-col justify-center items=center pt-5">
+        <div
+          className={`flex flex-row form-control z-10 sm:mx-10 lg:mx-24 xl:mx-48 ${bgColor} ${bgcomps} ${bgdetail}`}
+        >
+          <input
+            type="text"
+            placeholder="Search"
+            className="input input-bordered"
+            name="q"
+            onChange={GetParams}
+          />
+          <div className={`mt-3 ${bgtext}`}>
+            <button
+              className={`mb-5 ml-11`}
+              onClick={() => {
+                setCurrentTheme(currentTheme === "dark" ? "light" : "dark");
+              }}
+            >
+              Toggle Theme: {currentTheme}
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div className={`grid gap-4 lg:mt-24 justify-center sm:grid-cols-2 sm:mx-10 lg:grid-cols-3 lg:mx-24 xl:grid-cols-4 xl:mx-48`}>
+      <div
+        className={`grid gap-4 lg:mt-10 justify-center sm:grid-cols-2 sm:mx-10 lg:grid-cols-3 lg:mx-24 xl:grid-cols-4 xl:mx-48`}
+      >
         {products.map((el) => (
           <Card el={el} key={el.id} />
         ))}
       </div>
-      <div className={`footer border mt-4 flex justify-center p-5 ${bgtext}`}>
+      </div>
+      <div className={`footer border mt-4 flex justify-center p-5 ${bgtext} ${bgColor}`}>
         <p>Copyright by @Coffee shop 2024</p>
       </div>
     </div>

@@ -1,14 +1,14 @@
 {
   "development": {
     "username": "postgres",
-    "password": "labola",
+    "password": "090874",
     "database": "database_coffe",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "test": {
     "username": "postgres",
-    "password": "labola",
+    "password": "090874",
     "database": "database_coffe_test ",
     "host": "127.0.0.1",
     "dialect": "postgres",

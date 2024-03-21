@@ -12,14 +12,16 @@ export default function Navbar() {
   const bgdetail = theme[currentTheme].bgdetail;
   const bgtext = theme[currentTheme].text;
 
+
+  console.log(currentTheme, theme[currentTheme])  
   return (
-    <div className={`navbar bg-base-100 border-b px-10 fixed top-0 left-0 right-0 z-10 ${bgColor} ${bgcomps} ${bgdetail} ${bgtext}`}>
+    <div className={`navbar border-b px-10 sticky top-0 left-0 right-0 z-40 ${bgColor} ${bgtext}`}>
       <div className="flex-1">
         <Link to={"/"} className="btn btn-ghost text-xl">
           Coffe shop
         </Link>
       </div>
-      <div className="flex gap-2">
+      <div className={`flex gap-2  ${bgColor} ${bgtext}`}>
         {localStorage.access_token && (
           <p className="font-bold">Welcome, {localStorage.username}</p>
         )}
