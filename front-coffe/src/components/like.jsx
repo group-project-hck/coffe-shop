@@ -36,15 +36,6 @@ function Likes({ id }) {
       socket.off("like:update:" + id);
     };
   }, [id]);
-  // useEffect(() => {
-  //   socket.on("like:update", (newLike) => {
-  //     setLike(newLike);
-  //   });
-
-  //   return () => {
-  //     socket.off("like:update");
-  //   };
-  // }, []);
 
   const iconClassName = like ? "w-5 h-5 mr-2 text-red-400" : "w-5 h-5 mr-2";
   return (

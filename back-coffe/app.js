@@ -1,6 +1,6 @@
 if (process.env.NODE_ENV !== "production") {
-  //pakai ini hanya utk local
-  require("dotenv").config(); //Install environment env
+	//pakai ini hanya utk local
+	require("dotenv").config(); //Install environment env
 }
 
 const express = require("express");
@@ -18,35 +18,32 @@ app.use("/", router);
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
-  cors: {
-    origin: "*",
-  },
+	cors: {
+		origin: "*",
+	},
 });
 
 let users = [];
 let messages = [];
-let likes = {}
+const rooms = ["room1", "room2", "room3"];
 
 io.on("connection", (socket) => {
-  console.log("A user connected", socket.id);
-  
-  // handshake
-  console.log(socket.handshake.auth);
-  if(socket.handshake.auth.username) {
-    users.push(socket.handshake.auth.username)
-  }
+	console.log("A user connected", socket.id);
 
-  // emit server to all client
-  socket.emit("message:info", messages)
+	if (socket.handshake.auth.username) {
+		users.push({ id: socket.id, username: socket.handshake.auth.username });
+	}
 
-  // send users event to all client
-  io.emit("users", users)
+	io.emit("users", users, rooms);
 
-  socket.on("message:new", (param) => {
-    messages.push(param);
-    io.emit("message:info", param)
-  })
+	socket.on("disconnect", () => {
+		users = users.filter(({ username }) => {
+			return username !== socket.handshake.auth.username;
+		});
+		io.emit("users", users, rooms);
+	});
 
+   // ----- ROOM JOIN -----
   socket.on("like:add", ({id}) => {
     likes[id] = likes[id] ? likes[id]+1 : 1
     io.emit("like:update:" + id, likes[id]); // Mengirim pembaruan jumlah like ke semua klien
@@ -60,18 +57,14 @@ io.on("connection", (socket) => {
       // likes--; // Mengurangi jumlah like jika lebih dari 0
       // io.emit("like:update", likes); // Mengirim pembaruan jumlah like ke semua klien
   });
-
-  socket.on("disconnect", () => {
-    users = users.filter(user => {
-      return user !== socket.handshake.auth.username
-    })
-    io.emit('users', users)
-  })
+  
+	// ----- ROOM JOIN -----
+	socket.on("message:new", (param) => {
+		if (param.target) {
+			io.to(param.target).emit("message:info", param);
+			socket.emit("message:info", param);
+		}
+	});
 });
 
-
-httpServer.listen(port, () => {
-  console.log("Server is running on port", port)
-})
-
-module.exports = app;
+module.exports = httpServer;
