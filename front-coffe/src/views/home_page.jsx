@@ -77,7 +77,7 @@ export default function Home_Page() {
 			navigate("/home");
 		}
 	}, [id]);
-
+	
 	return (
 		<>
 			<div className="form-control mt-20 mb-5 max-sm:mx-8 sm:mx-10 lg:mx-24 lg:fixed lg:mx-48 lg:mt-[-72px] z-10">

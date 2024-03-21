@@ -1,40 +1,56 @@
 import { useEffect, useState } from "react";
 import socket from "../socket";
+import Swal from "sweetalert2";
 
-function Likes() {
+function Likes({ id }) {
+  const [liked, setLiked] = useState(false);
   const [like, setLike] = useState(0);
 
   const handleLikeAdd = () => {
-    const newLike = like + 1;
-    setLike(newLike);
-
-    //socket
-    socket.emit("like:add");
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      setLiked(true);
+      socket.emit("like:add", { id });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "You need to log in first!",
+      });
+    }
   };
 
   const handleLikeDec = () => {
-    const newLike = like - 1;
-    setLike(newLike);
-
+    setLiked(false);
     //socket
-    socket.emit("like:subtract");
+    socket.emit("like:subtract", { id });
   };
 
   useEffect(() => {
-    socket.on("like:update", (newLike) => {
-      setLike(newLike);
+    socket.on("like:update:" + id, (newLikeCount) => {
+      setLike(newLikeCount);
     });
 
+    // Membersihkan event listener pada saat komponen dibongkar
     return () => {
-      socket.off("like:update");
+      socket.off("like:update:" + id);
     };
-  }, []);
+  }, [id]);
+  // useEffect(() => {
+  //   socket.on("like:update", (newLike) => {
+  //     setLike(newLike);
+  //   });
+
+  //   return () => {
+  //     socket.off("like:update");
+  //   };
+  // }, []);
 
   const iconClassName = like ? "w-5 h-5 mr-2 text-red-400" : "w-5 h-5 mr-2";
   return (
     <div>
       <div
-        onClick={like > 0 ? handleLikeDec : handleLikeAdd}
+        onClick={liked ? handleLikeDec : handleLikeAdd}
         className="flex-1 flex items-center text-white text-xs text-gray-400 hover:text-blue-400 transition duration-350 ease-in-out"
       >
         <svg viewBox="0 0 24 24" fill="currentColor" className={iconClassName}>

@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import like from "./like";
 import Likes from "./like";
 
 export default function Card({ el, Payment }) {
@@ -35,7 +34,7 @@ export default function Card({ el, Payment }) {
           }).format(el.price)}
         </p>
         <div className="card-actions justify-between">
-          <Likes />
+          <Likes id={el.id}/>
           <div className="card-actions justify-end">
             {!localStorage.access_token ? (
               <div
