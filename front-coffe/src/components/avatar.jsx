@@ -20,7 +20,11 @@ export default function Avatar() {
 					<div className="w-10 rounded-full">
 						<img
 							alt="Tailwind CSS Navbar component"
-							src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+							src={
+								localStorage.picture
+									? localStorage.picture
+									: "https://cdn.pixabay.com/photo/2013/07/12/14/36/man-148582_1280.png"
+							}
 						/>
 					</div>
 				</div>
