@@ -25,10 +25,11 @@ export default function Chat_Page() {
 	// -------- USER --------
 	const [users, setUsers] = useState([]);
 	const [target, setTarget] = useState("");
+	const [targetGoTo, setTargetGoTo] = useState("");
 
 	// -------- MESSAGE --------
 	const [newMessage, setNewMessage] = useState("");
-	const [messages, setMessages] = useState([]);
+	const [messages, setMessages] = useState({});
 
 	// -------- ROOM --------
 	const [rooms, setRoom] = useState([]);
@@ -49,7 +50,22 @@ export default function Chat_Page() {
 		});
 
 		socket.on("message:info", (param) => {
-			setMessages(messages.concat(param));
+			const chatPair =
+				localStorage.username === param.from ? param.goTo : param.from;
+			const oldMessages = messages[chatPair] ? messages[chatPair] : [];
+
+			oldMessages.push(param);
+
+			/**
+			 * {
+			 *   admin: [{}, {}]
+			 * 	 galih: [{}, {}]
+			 * }
+			 */
+			setMessages({
+				...messages,
+				[chatPair]: oldMessages,
+			});
 		});
 
 		return () => {
@@ -60,25 +76,18 @@ export default function Chat_Page() {
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
-
 		try {
-			socket.emit("message:new", {
-				from: localStorage.username,
-				message: newMessage,
-				target: target,
-			});
-
-			setNewMessage("");
+			if (target) {
+				socket.emit("message:new", {
+					from: localStorage.username,
+					message: newMessage,
+					target: target,
+					goTo: targetGoTo,
+				});
+				setNewMessage("");
+			}
 		} catch (error) {
 			console.log(error);
-		}
-	};
-
-	// --------- ROOM ---------
-	const joinRoom = (e) => {
-		e.preventDefault();
-		if (localStorage.username && room) {
-			socket.emit("join_room", room);
 		}
 	};
 
@@ -135,14 +144,19 @@ export default function Chat_Page() {
 								<span className="font-bold">Active Conversations</span>
 							</div>
 							<div className="flex flex-col space-y-1 mt-4 -mx-2 h-72 overflow-y-auto">
-								{rooms.map((room, i) => (
+								{users.map((el) => (
 									<button
-										onClick={() => socket.emit("join", room)}
+										onClick={() => {
+											setTarget(el.id);
+											setTargetGoTo(el.username);
+										}}
 										className="flex flex-row items-center hover:bg-gray-100 rounded-xl p-2"
-										key={i}
+										key={el.id}
 									>
 										<div className="flex items-center justify-center h-4 w-4 bg-green-600 rounded-full"></div>
-										<div className="ml-2 text-sm font-semibold">{room}</div>
+										<div className="ml-2 text-sm font-semibold">
+											{el.username}
+										</div>
 									</button>
 								))}
 							</div>
@@ -153,7 +167,7 @@ export default function Chat_Page() {
 							<div className="flex flex-col h-full overflow-x-auto mb-4">
 								<div className="flex flex-col h-full">
 									<div className="grid grid-cols-12 gap-y-2">
-										{messages.map((el, i) => {
+										{messages[targetGoTo]?.map((el, i) => {
 											return el.from === localStorage.username ? (
 												<div
 													className="col-start-6 col-end-13 p-3 rounded-lg"
@@ -162,7 +176,7 @@ export default function Chat_Page() {
 													<div className="flex items-center justify-start flex-row-reverse">
 														<div className="flex items-center justify-center h-4 w-4 bg-yellow-600 rounded-full"></div>
 														<div className="relative mr-3 text-sm bg-indigo-100 py-2 px-4 shadow rounded-xl">
-															<div>{el.message}</div>
+															<div>{el.message || el}</div>
 														</div>
 													</div>
 												</div>
@@ -174,7 +188,7 @@ export default function Chat_Page() {
 													<div className="flex flex-row items-center">
 														<div className="flex items-center justify-center h-4 w-4 bg-blue-600 rounded-full"></div>
 														<div className="relative ml-3 text-sm bg-white py-2 px-4 shadow rounded-xl">
-															<div>{el.message}</div>
+															<div>{el.message || el}</div>
 														</div>
 													</div>
 												</div>

@@ -30,21 +30,11 @@ const rooms = ["room1", "room2", "room3"];
 io.on("connection", (socket) => {
 	console.log("A user connected", socket.id);
 
-	console.log(socket.handshake.auth);
 	if (socket.handshake.auth.username) {
 		users.push({ id: socket.id, username: socket.handshake.auth.username });
 	}
 
 	io.emit("users", users, rooms);
-
-	socket.on("message:new", (param) => {
-		messages.push(param);
-		if (param.target) {
-			socket.emit("message:info", messages);
-			io.to(param.target).emit("message:info", param);
-			io.to(param.id).emit("message:info", param);
-		}
-	});
 
 	socket.on("disconnect", () => {
 		users = users.filter(({ username }) => {
@@ -54,10 +44,11 @@ io.on("connection", (socket) => {
 	});
 
 	// ----- ROOM JOIN -----
-	socket.on("join", (room) => {
-		socket.join(room);
-		console.log(`user with ID: ${socket.id} join room: ${room}`);
-		io.to(room).emit("message:info", messages);
+	socket.on("message:new", (param) => {
+		if (param.target) {
+			io.to(param.target).emit("message:info", param);
+			socket.emit("message:info", param);
+		}
 	});
 });
 
