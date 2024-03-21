@@ -25,6 +25,7 @@ const io = new Server(httpServer, {
 
 let users = [];
 let messages = [];
+let likes = 0;
 
 io.on("connection", (socket) => {
   console.log("A user connected", socket.id);
@@ -45,6 +46,19 @@ io.on("connection", (socket) => {
     messages.push(param);
     io.emit("message:info", param)
   })
+
+  socket.on("like:add", () => {
+    likes++; // Menambah jumlah like
+    io.emit("like:update", likes); // Mengirim pembaruan jumlah like ke semua klien
+  });
+
+  // Tangani event saat client mengurangi like
+  socket.on("like:subtract", () => {
+    if (likes > 0) {
+      likes--; // Mengurangi jumlah like jika lebih dari 0
+      io.emit("like:update", likes); // Mengirim pembaruan jumlah like ke semua klien
+    }
+  });
 
   socket.on("disconnect", () => {
     users = users.filter(user => {

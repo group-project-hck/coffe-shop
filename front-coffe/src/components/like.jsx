@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import socket from "../socket";
 
 function Likes() {
   const [like, setLike] = useState(0);
@@ -8,6 +9,7 @@ function Likes() {
     setLike(newLike);
 
     //socket
+    socket.emit("like:add");
   };
 
   const handleLikeDec = () => {
@@ -15,7 +17,18 @@ function Likes() {
     setLike(newLike);
 
     //socket
+    socket.emit("like:subtract");
   };
+
+  useEffect(() => {
+    socket.on("like:update", (newLike) => {
+      setLike(newLike);
+    });
+
+    return () => {
+      socket.off("like:update");
+    };
+  }, []);
 
   const iconClassName = like ? "w-5 h-5 mr-2 text-red-400" : "w-5 h-5 mr-2";
   return (

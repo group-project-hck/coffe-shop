@@ -176,6 +176,14 @@ class Product_Controller {
 			next(error);
 		}
 	}
+
+	static async addLike(req, res, next) {
+		try {
+			
+		} catch (error) {
+			next(error)
+		}
+	}
 }
 
 module.exports = Product_Controller;
