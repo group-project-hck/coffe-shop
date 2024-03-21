@@ -40,7 +40,7 @@ class User_Controller {
 			});
 			const payload = ticket.getPayload();
 
-			const { email, name } = payload;
+			const { email, name, picture } = payload;
 			const [user, created] = await User.findOrCreate({
 				where: { email },
 				defaults: {
@@ -56,6 +56,7 @@ class User_Controller {
 				access_token: access_token,
 				username: user.username,
 				email: user.email,
+				picture,
 			});
 		} catch (error) {
 			next(error);
