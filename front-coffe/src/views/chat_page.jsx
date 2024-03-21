@@ -30,6 +30,9 @@ export default function Chat_Page() {
 	const [newMessage, setNewMessage] = useState("");
 	const [messages, setMessages] = useState([]);
 
+	// -------- ROOM --------
+	const [rooms, setRoom] = useState([]);
+
 	useEffect(() => {
 		socket.disconnect();
 		socket.auth = {
@@ -40,8 +43,9 @@ export default function Chat_Page() {
 	}, []);
 
 	useEffect(() => {
-		socket.on("users", (param) => {
+		socket.on("users", (param, rooms) => {
 			setUsers(param);
+			setRoom(rooms);
 		});
 
 		socket.on("message:info", (param) => {
@@ -71,7 +75,6 @@ export default function Chat_Page() {
 	};
 
 	// --------- ROOM ---------
-	const [room, setRoom] = useState(1);
 	const joinRoom = (e) => {
 		e.preventDefault();
 		if (localStorage.username && room) {
@@ -132,17 +135,14 @@ export default function Chat_Page() {
 								<span className="font-bold">Active Conversations</span>
 							</div>
 							<div className="flex flex-col space-y-1 mt-4 -mx-2 h-72 overflow-y-auto">
-								{users.map((el) => (
+								{rooms.map((room, i) => (
 									<button
-										onClick={() => {
-											setTarget(el.id);
-										}}
+										onClick={() => socket.emit("join", room)}
 										className="flex flex-row items-center hover:bg-gray-100 rounded-xl p-2"
+										key={i}
 									>
 										<div className="flex items-center justify-center h-4 w-4 bg-green-600 rounded-full"></div>
-										<div className="ml-2 text-sm font-semibold">
-											{el.username}
-										</div>
+										<div className="ml-2 text-sm font-semibold">{room}</div>
 									</button>
 								))}
 							</div>

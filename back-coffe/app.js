@@ -24,9 +24,8 @@ const io = new Server(httpServer, {
 });
 
 let users = [];
-console.log(users);
 let messages = [];
-console.log(messages);
+const rooms = ["room1", "room2", "room3"];
 
 io.on("connection", (socket) => {
 	console.log("A user connected", socket.id);
@@ -36,7 +35,7 @@ io.on("connection", (socket) => {
 		users.push({ id: socket.id, username: socket.handshake.auth.username });
 	}
 
-	io.emit("users", users);
+	io.emit("users", users, rooms);
 
 	socket.on("message:new", (param) => {
 		messages.push(param);
@@ -51,13 +50,14 @@ io.on("connection", (socket) => {
 		users = users.filter(({ username }) => {
 			return username !== socket.handshake.auth.username;
 		});
-		io.emit("users", users);
+		io.emit("users", users, rooms);
 	});
 
 	// ----- ROOM JOIN -----
-	socket.on("join_room", (data) => {
-		socket.join(data);
-		console.log(`user with ID: ${socket.id} join room: ${data}`);
+	socket.on("join", (room) => {
+		socket.join(room);
+		console.log(`user with ID: ${socket.id} join room: ${room}`);
+		io.to(room).emit("message:info", messages);
 	});
 });
 
