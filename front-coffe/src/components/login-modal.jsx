@@ -105,11 +105,11 @@ export default function Form_Login() {
 					"84835869104-app1ea9lob7o3j5ns9pp8noudn7lic0o.apps.googleusercontent.com",
 				callback: handleCredentialResponse,
 			});
-			google.accounts.id.renderButton(
-				document.getElementById("buttonDiv"),
-				{ theme: "outline", size: "large" } // customization attributes
-			);
-			google.accounts.id.prompt(); // also display the One Tap dialog
+			google.accounts.id.renderButton(document.getElementById("buttonDiv"), {
+				theme: "auto",
+				size: "large",
+			});
+			google.accounts.id.prompt();
 		};
 	}, []);
 
@@ -177,13 +177,16 @@ export default function Form_Login() {
 							Continue
 						</button>
 					</form>
-					<p className="text-center font-bold">- OR -</p>
+					<div className="divider">OR</div>
 
 					{/* LOGIN SOSMED */}
-					<div id="buttonDiv" className="flex justify-center my-4"></div>
+					<div
+						id="buttonDiv"
+						className="absolute -translate-x-1/2 left-1/2 max-sm:left-1/3 max-sm:right-1/2"
+					/>
 					{/* END SOSMED */}
 
-					<p className="text-center text-slate-400">
+					<p className="text-center text-slate-400 mt-24 max-sm:mt-20 max-sm:text-sm">
 						By registering, you agree to our{" "}
 						<Link to={"#"} className="text-blue-700">
 							Terms & Conditions

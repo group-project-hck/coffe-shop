@@ -145,7 +145,7 @@ export default function Form_Register() {
 							Register
 						</button>
 					</form>
-					<p className="text-center text-slate-400">
+					<p className="text-center text-slate-400 max-sm:text-sm">
 						By registering, you agree to our{" "}
 						<Link to={"#"} className="text-blue-700">
 							Terms & Conditions

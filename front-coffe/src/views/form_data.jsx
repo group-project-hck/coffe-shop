@@ -33,7 +33,7 @@ export default function Form_Data() {
 	const Submit = async (e) => {
 		e.preventDefault();
 		let form_input = new FormData();
-		form_input.append("image", file);
+		form_input.append("image", file || input.image);
 		form_input.append("title", input.title);
 		form_input.append("description", input.description);
 		form_input.append("price", input.price);
@@ -97,22 +97,19 @@ export default function Form_Data() {
 
 	return (
 		<>
-			<div className="mt-16 h-screen w-full flex flex-col justify-center items-center">
+			<div className="h-screen w-full flex justify-center items-center border-t border-red-500 absolute top-0 max-sm:px-4">
 				<form
 					action=""
-					className="flex flex-col gap-2 p-5 border w-1/2 rounded-lg bg-slate-100"
+					className="flex flex-wrap flex-col gap-2 lg:bg-slate-200 p-10 max-sm:p-0 max-sm:w-full"
 					onSubmit={Submit}
 				>
-					<Link
-						to={"/products"}
-						className="btn btn-sm btn-circle btn-ghost absolute right-[26%] top-[35%]"
-					>
+					<Link to={"/products"} className="btn btn-circle btn-ghost">
 						✕
 					</Link>
-					<h1 className="font-bold mb-4 tracking-tigh text-xl text-center border-b p-3 w-1/2 m-auto">
+					<h1 className="font-bold mb-4 tracking-tigh text-xl text-center p-3 w-1/2 m-auto">
 						{id ? "Update Products" : "Input New Products"}
 					</h1>
-					<label className="input input-bordered flex items-center gap-2">
+					<label className="input input-bordered flex items-center gap-2 max-sm:w-full">
 						Title
 						<input
 							type="text"
@@ -123,7 +120,7 @@ export default function Form_Data() {
 							value={input.title}
 						/>
 					</label>
-					<label className="input input-bordered flex items-center gap-2">
+					<label className="input input-bordered flex items-center gap-2 max-sm:w-full">
 						Description
 						<input
 							type="text"
@@ -134,7 +131,7 @@ export default function Form_Data() {
 							value={input.description}
 						/>
 					</label>
-					<label className="input input-bordered flex items-center gap-2">
+					<label className="input input-bordered flex items-center gap-2 max-sm:w-full">
 						Image
 						<input
 							type="file"
@@ -144,7 +141,7 @@ export default function Form_Data() {
 							onChange={getImage}
 						/>
 					</label>
-					<div className="flex justify-between gap-2">
+					<div className="flex justify-between gap-2 max-sm:flex-col">
 						<label className="input input-bordered flex items-center gap-2 w-full">
 							Price
 							<input
@@ -157,7 +154,7 @@ export default function Form_Data() {
 							/>
 						</label>
 						<select
-							className="select select-bordered w-full max-w-xs"
+							className="select select-bordered w-full lg:max-w-xs max-sm:w-full"
 							name="CategoryId"
 							onChange={getInput}
 							value={input.CategoryId}
@@ -167,10 +164,7 @@ export default function Form_Data() {
 							<option value={"2"}>Hot</option>
 						</select>
 					</div>
-					<button
-						type="Submit"
-						className="btn btn-primary mt-4 w-1/2 m-auto btn-circle"
-					>
+					<button type="Submit" className="btn btn-primary">
 						Submit
 					</button>
 				</form>

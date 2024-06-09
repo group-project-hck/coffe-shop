@@ -8,17 +8,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetch_pub_product } from "../store/product_slice";
 
 export default function Public() {
-	const [params, setParams] = useState({});
 	const dispatch = useDispatch();
-	const { pub_products } = useSelector((state) => state.products);
-	useEffect(() => {
-		dispatch(fetch_pub_product(params));
-	}, [params]);
+	const [params, setParams] = useState({});
 
 	const GetParams = (e) => {
 		const { name, value } = e.target;
 		setParams({ ...params, [name]: value });
 	};
+
+	useEffect(() => {
+		params
+			? dispatch(fetch_pub_product(params))
+			: dispatch(fetch_pub_product(params));
+	}, [params]);
 
 	// ---------------- MIDTRANS ----------------
 	const { id } = useParams();
@@ -61,24 +63,30 @@ export default function Public() {
 		}
 	}, [id]);
 
+	const { pub_products } = useSelector((state) => state.products);
+
 	return (
 		<>
-			<div className="form-control mt-20 mb-5 max-sm:mx-8 sm:mx-10 lg:mx-24 lg:fixed lg:mx-48 lg:mt-[-72px] z-10">
-				<input
-					type="text"
-					placeholder="Search"
-					className="input input-bordered"
-					name="q"
-					onChange={GetParams}
-				/>
-			</div>
-			<div className="grid gap-4 lg:mt-20 justify-center sm:grid-cols-2 sm:mx-10 lg:grid-cols-3 lg:mx-24 xl:grid-cols-4 xl:mx-48">
-				{pub_products.map((el) => (
-					<Card el={el} Payment={Payment} key={el.id} />
-				))}
-			</div>
-			<div className="footer border mt-4 flex justify-center p-5">
-				<p>Copyright by @Coffee shop 2024</p>
+			<div className="flex flex-wrap justify-center">
+				<div className="min-h-screen container max-sm:px-4 lg:py-4 max-sm:pb-4">
+					<div className="form-control lg:fixed lg:top-2 lg:-translate-x-1/2 lg:left-1/2 lg:z-20 max-sm:my-4">
+						<input
+							type="text"
+							placeholder="Search"
+							className="input input-bordered"
+							name="q"
+							onChange={GetParams}
+						/>
+					</div>
+					<div className="grid grid-cols-4 gap-4 max-sm:grid-cols-1">
+						{pub_products.map((el) => (
+							<Card el={el} Payment={Payment} key={el.id} />
+						))}
+					</div>
+				</div>
+				<div className="footer border flex justify-center py-5 bg-white">
+					<p>Copyright by @Coffee shop 2024</p>
+				</div>
 			</div>
 		</>
 	);

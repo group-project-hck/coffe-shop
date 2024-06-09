@@ -62,31 +62,51 @@ export default function Product() {
 		}
 	};
 	useEffect(() => {
-		if (id) Delete();
+		if (id) {
+			Swal.fire({
+				title: "Are you sure?",
+				text: "You won't be able to revert this!",
+				icon: "warning",
+				showCancelButton: true,
+				confirmButtonText: "Yes, delete it!",
+				cancelButtonText: "No, cancel!",
+			}).then((result) => {
+				if (result.isConfirmed) {
+					Delete();
+				} else if (result.dismiss === Swal.DismissReason.cancel) {
+					navigate("/products");
+				}
+			});
+		}
 	}, [id]);
 
 	return (
 		<>
-			<div className="overflow-x-auto mt-16 w-3/4 m-auto">
-				<Link to={"/form"} className="btn btn-primary my-4 btn-sm">
+			<div className="overflow-x-auto mx-auto max-sm:m-0 max-sm: px-4 w-3/4 max-sm:w-full max-sm:pb-4">
+				<Link
+					to={"/form"}
+					className="btn btn-primary my-4 btn-sm max-sm:w-full"
+				>
 					Add Product
 				</Link>
 				<table className="table">
 					{/* head */}
-					<thead>
+					<thead className="max-sm:hidden">
 						<tr>
 							<th>No</th>
 							<th>Title</th>
-							<th>Description</th>
+							<th className="max-sm:hidden">Description</th>
 							<th>Price</th>
 							<th>Action</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody className="max-sm:flex max-sm:flex-col max-sm:max-w-full max-sm:gap-2">
 						{products.map((el, i) => (
 							<tr className="hover" key={el.id}>
-								<td>{i + 1}</td>
-								<td>
+								<td className="max-sm:absolute max-sm:font-bold max-sm:-translate-x-1/2 max-sm:left-1/2">
+									{i + 1}
+								</td>
+								<td className="max-sm:pt-10">
 									<div className="flex items-center gap-3">
 										<div className="avatar">
 											<div className="mask mask-squircle w-16 h-16">
@@ -102,7 +122,9 @@ export default function Product() {
 									</div>
 								</td>
 								<td>
-									<span className="text-sm">{el.description}</span>
+									<span className="text-sm max-sm:hidden">
+										{el.description}
+									</span>
 								</td>
 								<td>
 									{" "}
@@ -113,6 +135,25 @@ export default function Product() {
 								</td>
 								<th className="flex flex-col gap-2">
 									<Link
+										onClick={() => {
+											Swal.fire({
+												title: "Are you sure?",
+												text: "You won't be able to revert this!",
+												icon: "warning",
+												showCancelButton: true,
+												confirmButtonColor: "#3085d6",
+												cancelButtonColor: "#d33",
+												confirmButtonText: "Yes, delete it!",
+											}).then((result) => {
+												if (result.isConfirmed) {
+													Swal.fire({
+														title: "Deleted!",
+														text: "Your file has been deleted.",
+														icon: "success",
+													});
+												}
+											});
+										}}
 										to={`/products/${el.id}`}
 										className="btn btn-error btn-xs text-white"
 									>

@@ -6,6 +6,7 @@ export default function Avatar() {
 		e.preventDefault();
 		localStorage.removeItem("access_token");
 		localStorage.removeItem("username");
+		localStorage.removeItem("picture");
 		navigate("/");
 	};
 
@@ -17,7 +18,7 @@ export default function Avatar() {
 					role="button"
 					className="btn btn-ghost btn-circle avatar"
 				>
-					<div className="w-10 rounded-full">
+					<div className="w-10 rounded-full border-2 border-slate-400">
 						<img
 							alt="Tailwind CSS Navbar component"
 							src={
@@ -30,7 +31,7 @@ export default function Avatar() {
 				</div>
 				<ul
 					tabIndex={0}
-					className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52 gap-2"
+					className="mt-3 z-50 p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52 gap-2"
 				>
 					<li>
 						<Link to={"/home"}>Home</Link>

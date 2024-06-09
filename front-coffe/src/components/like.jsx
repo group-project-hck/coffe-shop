@@ -12,10 +12,20 @@ function Likes({ id }) {
 			setLiked(true);
 			socket.emit("like:add", { id });
 		} else {
-			Swal.fire({
+			const Toast = Swal.mixin({
+				toast: true,
+				position: "top-end",
+				showConfirmButton: false,
+				timer: 3000,
+				timerProgressBar: true,
+				didOpen: (toast) => {
+					toast.onmouseenter = Swal.stopTimer;
+					toast.onmouseleave = Swal.resumeTimer;
+				},
+			});
+			Toast.fire({
 				icon: "error",
-				title: "Oops...",
-				text: "You need to log in first!",
+				title: "Please login first",
 			});
 		}
 	};
@@ -37,7 +47,7 @@ function Likes({ id }) {
 		};
 	}, [id]);
 
-	const iconClassName = like ? "w-5 h-5 mr-2 text-red-400" : "w-5 h-5 mr-2";
+	const iconClassName = like ? "w-6 h-6 mr-2 text-red-400" : "w-6 h-6 mr-2";
 	return (
 		<div>
 			<div
